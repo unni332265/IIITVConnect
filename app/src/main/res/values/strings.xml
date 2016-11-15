@@ -67,7 +67,14 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+
+
     <string name="title_activity_todo_list">ToDo</string>
+    <string name="message_empty_layout_changes">Add an item above to get started.</string>
+    <string name="action_add_item">Add item</string>
+    <string name="action_remove_item">Remove item</string>
 
 
 </resources>
