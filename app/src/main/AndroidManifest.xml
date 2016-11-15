@@ -17,7 +17,7 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name" />
-        <activity android:name=".WelcomeActivity"></activity>
+        <activity android:name=".WelcomeActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".ResetPasswordActivity" />
         <activity
@@ -31,6 +31,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
+        <activity
+            android:name=".TodoListActivity"
+            android:label="@string/title_activity_todo_list"
+            android:parentActivityName=".PersonalBoard"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="saurabhjn76.com.iiitvconnect.PersonalBoard" />
+        </activity>
     </application>
 
 </manifest>

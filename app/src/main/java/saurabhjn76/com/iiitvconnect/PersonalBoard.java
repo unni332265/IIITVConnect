@@ -63,11 +63,16 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
    static private TextView emptyView;
    static private List<Tile> tileList = new ArrayList<>();
    static private TilesAdapter tilesAdapter;
+    static  private FloatingActionButton fab;
     private Spinner spinner;
     private Toolbar toolbar;
     private FirebaseAuth firebaseAuth;
     private Button deadline;
     private int day=5,month=12,yar=2006;
+    static private RecyclerView recyclerViewCompleted;
+    static private TextView emptyViewCompleted;
+    static private List<Tile> tileListCompleted = new ArrayList<>();
+    static private TilesAdapter tilesAdapterCompleted;
     ArrayAdapter<String> spinnerAdapter;
 
     @Override
@@ -97,11 +102,35 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+                    floatingActionButton.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+                    floatingActionButton.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -272,7 +301,8 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
            // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             //TODO: make swtich case here:
             switch(getArguments().getInt(ARG_SECTION_NUMBER)){
-                case 1: recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+                case 1:
+                    recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
                     emptyView = (TextView) rootView.findViewById(R.id.empty_view);
                     tilesAdapter = new TilesAdapter(tileList);
                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
@@ -289,6 +319,26 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
                         recyclerView.setVisibility(View.VISIBLE);
                         emptyView.setVisibility(View.GONE);
                     }
+                    break;
+                case 2: //fab.setVisibility(View.INVISIBLE);
+                    recyclerViewCompleted = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+                    emptyViewCompleted = (TextView) rootView.findViewById(R.id.empty_view);
+                    tilesAdapterCompleted = new TilesAdapter(tileListCompleted);
+                    RecyclerView.LayoutManager mLayoutManagerCompleted = new LinearLayoutManager(rootView.getContext());
+
+                    recyclerViewCompleted.setLayoutManager(mLayoutManagerCompleted);
+                    recyclerViewCompleted.setItemAnimator(new DefaultItemAnimator());
+                    recyclerViewCompleted.setAdapter(tilesAdapterCompleted);
+                    if (tileListCompleted.size()==0) {
+                        recyclerViewCompleted.setVisibility(View.GONE);
+                        emptyViewCompleted.setVisibility(View.VISIBLE);
+                    }
+
+                    else {
+                        recyclerViewCompleted.setVisibility(View.VISIBLE);
+                        emptyViewCompleted.setVisibility(View.GONE);
+                    }
+                    break;
 
             }
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
