@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "292971270883",
+    "firebase_url": "https://iiitvconnect.firebaseio.com",
+    "project_id": "iiitvconnect",
+    "storage_bucket": "iiitvconnect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292971270883:android:b7d0a688b9ae8641",
+        "android_client_info": {
+          "package_name": "saurabhjn76.com.iiitvconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "292971270883-i022jh48k6e1h5q0ivvbepbfpa20c6go.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6j777eL_MV115nm1nnYbFz7z5BrV3aXc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
