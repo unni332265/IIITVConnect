@@ -1,5 +1,9 @@
 package saurabhjn76.com.iiitvconnect;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -7,7 +11,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -21,7 +29,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class PersonalBoard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -39,17 +59,40 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+   static private RecyclerView recyclerView;
+   static private TextView emptyView;
+   static private List<Tile> tileList = new ArrayList<>();
+   static private TilesAdapter tilesAdapter;
+    private Spinner spinner;
+    private Toolbar toolbar;
+    private FirebaseAuth firebaseAuth;
+    private Button deadline;
+    private int day=5,month=12,yar=2006;
+    ArrayAdapter<String> spinnerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.personal_board_main);
+        firebaseAuth = FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser() == null){
+            //closing this activity
+            finish();
+            //starting login activity
+            startActivity(new Intent(this, LoginActivity.class));
+        }
+
+        //getting current user
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -62,10 +105,52 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                final AlertDialog.Builder builder = new AlertDialog.Builder(PersonalBoard.this);
+                builder.setTitle("Create task tile");
+                // Get the layout inflater
+                LayoutInflater inflater = PersonalBoard.this.getLayoutInflater();
+
+                // Inflate and set the layout for the dialog
+                // Pass null as the parent view because its going in the dialog layout
+                builder.setView(inflater.inflate(R.layout.dialog_create_tile, null))
+                        // Add action buttons
+                        .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                // sign in the user ...
+                                Dialog f = (Dialog) dialog;
+                                final EditText title,description;
+                                title= (EditText) f.findViewById(R.id.title);
+                                description = (EditText) f.findViewById(R.id.description);
+                                deadline =(Button) f.findViewById(R.id.deadline);
+                                builder.setCancelable(false);
+
+                                // Toast.makeText(getApplicationContext(),title.getText()+" ",Toast.LENGTH_SHORT).show();
+                                Tile tile = new Tile(title.getText().toString(),description.getText().toString(),tileList.size()+1,day+"/"+month+"/"+yar);
+                                tileList.add(tile);
+                                if (tileList.size()==0) {
+                                    recyclerView.setVisibility(View.GONE);
+                                    emptyView.setVisibility(View.VISIBLE);
+                                }
+                                else {
+                                    recyclerView.setVisibility(View.VISIBLE);
+                                    emptyView.setVisibility(View.GONE);
+                                }
+
+                                tilesAdapter.notifyDataSetChanged();
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                builder.create().show();
+
             }
         });
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -74,6 +159,7 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
     }
     @Override
@@ -85,6 +171,27 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
             super.onBackPressed();
         }
     }
+    public  void Datepicker(View v){
+        // Toast.makeText(getApplicationContext(),"sdsadas",Toast.LENGTH_SHORT).show();
+        // Toast.makeText(v.getContext(),"sasdasd",Toast.LENGTH_SHORT).show();
+        final Calendar c = Calendar.getInstance();
+
+        DatePickerDialog dpd = new DatePickerDialog(v.getContext(),
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+                        day=dayOfMonth;
+                        month=monthOfYear;
+                        yar=year;
+
+                    }
+                }, c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DATE));
+        dpd.show();
+
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -162,9 +269,29 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_personal_board, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+           // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             //TODO: make swtich case here:
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            switch(getArguments().getInt(ARG_SECTION_NUMBER)){
+                case 1: recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+                    emptyView = (TextView) rootView.findViewById(R.id.empty_view);
+                    tilesAdapter = new TilesAdapter(tileList);
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
+
+                    recyclerView.setLayoutManager(mLayoutManager);
+                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+                    recyclerView.setAdapter(tilesAdapter);
+                    if (tileList.size()==0) {
+                        recyclerView.setVisibility(View.GONE);
+                        emptyView.setVisibility(View.VISIBLE);
+                    }
+
+                    else {
+                        recyclerView.setVisibility(View.VISIBLE);
+                        emptyView.setVisibility(View.GONE);
+                    }
+
+            }
+            //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
     }
