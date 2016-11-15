@@ -196,9 +196,9 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "Pending";
                 case 1:
-                    return "SECTION 2";
+                    return "Completed";
             }
             return null;
         }
