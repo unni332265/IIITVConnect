@@ -77,4 +77,14 @@
     <string name="action_remove_item">Remove item</string>
 
 
+
+    <string name="personal_board">Personal Board</string>
+    <string-array name="boards">
+        <item>Personal Board</item>
+        <item> Ventura</item>
+        <item>Exams</item>
+        <item>Add More</item>
+    </string-array>
+
+
 </resources>
