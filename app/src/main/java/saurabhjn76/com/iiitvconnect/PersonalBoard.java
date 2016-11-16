@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.provider.CalendarContract;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -32,11 +33,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -70,6 +74,8 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
     private Toolbar toolbar;
     private FirebaseAuth firebaseAuth;
     private Button deadline;
+    private boolean reminder=false;
+    private  String tle,desc;
     private int day=5,month=12,yar=2006;
     static private RecyclerView recyclerViewCompleted;
     static private TextView emptyViewCompleted;
@@ -167,14 +173,32 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
                                 // sign in the user ...
                                 Dialog f = (Dialog) dialog;
                                 final EditText title,description;
+                                Switch switched;
+                                switched =(Switch) f.findViewById(R.id.switch1);
                                 title= (EditText) f.findViewById(R.id.title);
                                 description = (EditText) f.findViewById(R.id.description);
                                 deadline =(Button) f.findViewById(R.id.deadline);
+                              //  switched.setChecked(false);
+                                switched.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                        if(b){
+                                            reminder=true;
+                                            Toast.makeText(getApplicationContext(),"IN",Toast.LENGTH_SHORT).show();
+                                        }
+                                        else
+                                            reminder =false;
+                                    }
+                                });
                                 builder.setCancelable(false);
+                                tle=title.getText().toString();
+                                desc=description.getText().toString();
 
                                 // Toast.makeText(getApplicationContext(),title.getText()+" ",Toast.LENGTH_SHORT).show();
                                 Tile tile = new Tile(title.getText().toString(),description.getText().toString(),tileList.size()+1,day+"/"+month+"/"+yar);
                                 tileList.add(tile);
+
+
                                 if (tileList.size()==0) {
                                     recyclerView.setVisibility(View.GONE);
                                     emptyView.setVisibility(View.VISIBLE);
@@ -185,6 +209,22 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
                                 }
 
                                 tilesAdapter.notifyDataSetChanged();
+                                if(reminder){
+                                    Calendar beginTime = Calendar.getInstance();
+                                    beginTime.set(yar, month, day, 13, 4);
+                                    Calendar endTime = Calendar.getInstance();
+                                    endTime.set(yar, month, day+1, 8, 30);
+                                    Intent intent = new Intent(Intent.ACTION_INSERT)
+                                            .setData(CalendarContract.Events.CONTENT_URI)
+                                            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+                                            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+                                            .putExtra(CalendarContract.Events.TITLE, tle)
+                                            .putExtra(CalendarContract.Events.DESCRIPTION, desc)
+                                            .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY)
+                                            .putExtra(Intent.EXTRA_EMAIL, firebaseAuth.getCurrentUser().getEmail());
+                                    startActivity(intent);
+                                    reminder=false;
+                                }
 
                             }
                         })
@@ -289,6 +329,13 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void toggle(View view) {
+        if(reminder==true)
+            reminder=false;
+        else
+            reminder =true;
     }
 
     /**
