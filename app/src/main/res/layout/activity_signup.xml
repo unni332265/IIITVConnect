@@ -21,12 +21,70 @@ tools:context="saurabhjn76.com.iiitvconnect.SignupActivity">
         android:layout_height="@dimen/logo_w_h"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="30dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/logo" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="48dp"
+        android:text="Connect"/>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+        <EditText
+            android:id="@+id/first_Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First Name"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@android:color/white" />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/last_Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last Name"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@android:color/white" />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Username"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@android:color/white" />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@android:color/white" />
+
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
@@ -36,8 +94,9 @@ tools:context="saurabhjn76.com.iiitvconnect.SignupActivity">
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="@android:color/white" />
-
     </android.support.design.widget.TextInputLayout>
+
+
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -75,7 +134,7 @@ tools:context="saurabhjn76.com.iiitvconnect.SignupActivity">
         android:layout_height="wrap_content"
         android:layout_marginTop="20dip"
         android:background="@null"
-        android:text="@string/btn_forgot_password"
+        android:text=""
         android:textAllCaps="false"
         android:textColor="@color/colorAccent" />
 

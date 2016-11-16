@@ -76,6 +76,7 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
     static private List<Tile> tileListCompleted = new ArrayList<>();
     static private TilesAdapter tilesAdapterCompleted;
     ArrayAdapter<String> spinnerAdapter;
+    private FirebaseAuth.AuthStateListener authListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,18 +245,20 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.profile) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.changeEmail) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.reset_password) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.delete_profile) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_update_profile) {
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_logout) {
+                firebaseAuth.signOut();
+            Intent intent = new Intent(PersonalBoard.this, WelcomeActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -15,10 +15,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private EditText inputEmail, inputPassword;
+    private EditText inputEmail, inputPassword,first_name,last_name,username,phone;
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
@@ -34,6 +36,10 @@ public class SignupActivity extends AppCompatActivity {
         btnSignIn = (Button) findViewById(R.id.sign_in_button);
         btnSignUp = (Button) findViewById(R.id.sign_up_button);
         inputEmail = (EditText) findViewById(R.id.email);
+        first_name = (EditText) findViewById(R.id.first_Name);
+        last_name = (EditText) findViewById(R.id.last_Name);
+        username = (EditText) findViewById(R.id.username);
+        phone = (EditText) findViewById(R.id.phone);
         inputPassword = (EditText) findViewById(R.id.password);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         btnResetPassword = (Button) findViewById(R.id.btn_reset_password);
@@ -56,8 +62,12 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String email = inputEmail.getText().toString().trim();
+                final String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
+                final String first = first_name.getText().toString().trim();
+                final String last = last_name.getText().toString().trim();
+                final String user = username.getText().toString().trim();
+                final String phon = phone.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
@@ -68,6 +78,19 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (TextUtils.isEmpty(first)) {
+                    Toast.makeText(getApplicationContext(), "Enter first name!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(user)) {
+                    Toast.makeText(getApplicationContext(), "Enter User name!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(phon)) {
+                    Toast.makeText(getApplicationContext(), "Enter Phone Number!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
 
                 if (password.length() < 6) {
                     Toast.makeText(getApplicationContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
@@ -89,6 +112,15 @@ public class SignupActivity extends AppCompatActivity {
                                     Toast.makeText(SignupActivity.this, "Authentication failed." + task.getException(),
                                             Toast.LENGTH_SHORT).show();
                                 } else {
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    DatabaseReference myRef = database.getReference();
+                                    DatabaseReference userRef = myRef.child("users/" + auth.getCurrentUser().getUid());
+                                    userRef.child("FirstName").setValue(first);
+                                    userRef.child("LastName").setValue(last);
+                                    userRef.child("UserName").setValue(user);
+                                    userRef.child("Emailid").setValue(email);
+                                    userRef.child("UID").setValue(auth.getCurrentUser().getUid());
+                                    userRef.child("Phone").setValue(phon);
                                     startActivity(new Intent(SignupActivity.this, MainActivity.class));
                                     finish();
                                 }
