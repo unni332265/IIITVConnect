@@ -8,7 +8,7 @@ import java.util.PriorityQueue;
  * Created by saurabh on 16/11/16.
  */
 
-public class User {
+public   class User {
     private String FirstName;
     private String LastName;
     private String Emailid;
