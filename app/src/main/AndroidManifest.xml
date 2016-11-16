@@ -40,7 +40,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="saurabhjn76.com.iiitvconnect.PersonalBoard" />
         </activity>
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".ProfileActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -247,6 +247,8 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
 
         if (id == R.id.profile) {
             // Handle the camera action
+            Intent intent = new Intent(PersonalBoard.this, ProfileActivity.class);
+            startActivity(intent);
         } else if (id == R.id.changeEmail) {
 
         } else if (id == R.id.reset_password) {
