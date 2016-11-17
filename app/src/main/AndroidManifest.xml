@@ -43,6 +43,7 @@
                 android:value="saurabhjn76.com.iiitvconnect.PersonalBoard" />
         </activity>
         <activity android:name=".ProfileActivity" />
+        <activity android:name=".CreateBoard"></activity>
     </application>
 
 </manifest>

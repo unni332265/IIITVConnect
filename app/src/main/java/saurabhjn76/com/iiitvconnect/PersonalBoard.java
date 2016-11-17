@@ -64,7 +64,10 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     *
      */
+    ArrayList<String> arr = new ArrayList<String>();
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
@@ -95,6 +98,7 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.personal_board_main);
+        arr.add("Personal_Board");
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() == null){
             //closing this activity
@@ -107,6 +111,26 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
         FirebaseUser user = firebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference userRef = mDatabase.child("personal/" + firebaseAuth.getCurrentUser().getUid());
+        DatabaseReference userRefBoard = mDatabase.child("userboards/" + firebaseAuth.getCurrentUser().getUid());
+        userRefBoard.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                arr.clear();
+                arr.add("Personal_Board");
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Log.e("BoardName", postSnapshot.getValue().toString());
+                    if (postSnapshot.getValue().toString()!="false") {
+                        arr.add(postSnapshot.getValue(String.class));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         /*userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -212,7 +236,7 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
         tabLayout.setupWithViewPager(mViewPager);
 
         spinner =(Spinner) findViewById(R.id.spinner);
-        spinnerAdapter = new ArrayAdapter<String>(PersonalBoard.this, R.layout.support_simple_spinner_dropdown_item,getResources().getStringArray(R.array.boards));
+        spinnerAdapter = new ArrayAdapter<String>(PersonalBoard.this, R.layout.support_simple_spinner_dropdown_item,arr);
         spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -367,8 +391,8 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
             Intent intent = new Intent(PersonalBoard.this, ProfileActivity.class);
             startActivity(intent);
         } else if (id == R.id.changeEmail) {
-           /* Intent intent = new Intent(PersonalBoard.this, AddRoomActivity.class);
-            startActivity(intent);*/
+            Intent intent = new Intent(PersonalBoard.this, CreateBoard.class);
+            startActivity(intent);
         } else if (id == R.id.reset_password) {
 
         } else if (id == R.id.delete_profile) {
@@ -528,4 +552,5 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
             return null;
         }
     }
+
 }
