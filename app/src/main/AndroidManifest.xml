@@ -43,8 +43,6 @@
                 android:value="saurabhjn76.com.iiitvconnect.PersonalBoard" />
         </activity>
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".AddRoomActivity" />
-        <activity android:name=".ChatRoom"></activity>
     </application>
 
 </manifest>

@@ -14,11 +14,14 @@ public class Tile {
     private  String description;
     private  int id;
     private String date;
-    public Tile(String title,String description,int id,String date) {
+    private boolean completed;
+    public Tile(String title,String description,int id,String date,boolean completed) {
         this.date = date;
         this.title=title;
         this.id=id;
         this.description=description;
+        this.completed=completed;
+
     }
 
     public int getId() {
@@ -35,5 +38,9 @@ public class Tile {
 
     public String getTitle() {
         return title;
+    }
+
+    public  boolean getcompleted(){
+        return completed;
     }
 }

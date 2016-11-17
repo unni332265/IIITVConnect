@@ -24,6 +24,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,6 +45,11 @@ import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -83,6 +89,7 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
     static private TilesAdapter tilesAdapterCompleted;
     ArrayAdapter<String> spinnerAdapter;
     private FirebaseAuth.AuthStateListener authListener;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +105,57 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
 
         //getting current user
         FirebaseUser user = firebaseAuth.getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference userRef = mDatabase.child("personal/" + firebaseAuth.getCurrentUser().getUid());
+        /*userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                tileList.clear();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Log.e("postsnap", postSnapshot.getValue().toString());
+                    if (postSnapshot.getValue().toString()!="false") {
+                        Tile tile = new Tile(postSnapshot.child("title").getValue(String.class), postSnapshot.child("description").getValue(String.class), postSnapshot.child("id").getValue(Integer.class), postSnapshot.child("date").getValue(String.class), postSnapshot.child("completed").getValue(boolean.class));
+                        tileList.add(tile);
+                        tilesAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });*/
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+               // Log.e("postsnap",dataSnapshot.getValue().toString());
+                tileList.clear();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                  //  Log.e("postsnap", postSnapshot.getValue().toString());
+                    if (postSnapshot.getValue().toString()!="false") {
+                        Tile tile = new Tile(postSnapshot.child("title").getValue(String.class), postSnapshot.child("description").getValue(String.class), postSnapshot.child("id").getValue(Integer.class), postSnapshot.child("date").getValue(String.class), postSnapshot.child("completed").getValue(boolean.class));
+                        tileList.add(tile);
+
+                        if (tileList.size()==0) {
+                            recyclerView.setVisibility(View.GONE);
+                            emptyView.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            recyclerView.setVisibility(View.VISIBLE);
+                            emptyView.setVisibility(View.GONE);
+                        }
+                        tilesAdapter.notifyDataSetChanged();
+                        Log.e("poap", postSnapshot.getValue().toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -118,6 +174,7 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
 
             @Override
             public void onPageSelected(int position) {
+                tilesAdapter.notifyDataSetChanged();
                 if (position == 0) {
                     FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
                     floatingActionButton.setVisibility(View.VISIBLE);
@@ -195,7 +252,7 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
                                 desc=description.getText().toString();
 
                                 // Toast.makeText(getApplicationContext(),title.getText()+" ",Toast.LENGTH_SHORT).show();
-                                Tile tile = new Tile(title.getText().toString(),description.getText().toString(),tileList.size()+1,day+"/"+month+"/"+yar);
+                                Tile tile = new Tile(title.getText().toString(),description.getText().toString(),tileList.size()+1,day+"/"+month+"/"+yar,false);
                                 tileList.add(tile);
 
 
@@ -225,6 +282,10 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
                                     startActivity(intent);
                                     reminder=false;
                                 }
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                DatabaseReference myRef = database.getReference();
+                                DatabaseReference userRef = myRef.child("personal/" + firebaseAuth.getCurrentUser().getUid()+"/"+tileList.size()+1);
+                                userRef.setValue(new Tile(title.getText().toString(),description.getText().toString(),tileList.size()+1,day+"/"+month+"/"+yar,false));
 
                             }
                         })
@@ -290,8 +351,8 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
             Intent intent = new Intent(PersonalBoard.this, ProfileActivity.class);
             startActivity(intent);
         } else if (id == R.id.changeEmail) {
-            Intent intent = new Intent(PersonalBoard.this, AddRoomActivity.class);
-            startActivity(intent);
+           /* Intent intent = new Intent(PersonalBoard.this, AddRoomActivity.class);
+            startActivity(intent);*/
         } else if (id == R.id.reset_password) {
 
         } else if (id == R.id.delete_profile) {
@@ -389,6 +450,7 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
                         recyclerView.setVisibility(View.VISIBLE);
                         emptyView.setVisibility(View.GONE);
                     }
+                    tilesAdapter.notifyDataSetChanged();
                     break;
                 case 2: //fab.setVisibility(View.INVISIBLE);
                     recyclerViewCompleted = (RecyclerView) rootView.findViewById(R.id.recycler_view);
