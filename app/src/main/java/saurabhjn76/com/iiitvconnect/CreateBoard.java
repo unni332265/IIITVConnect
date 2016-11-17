@@ -36,7 +36,7 @@ public class CreateBoard extends AppCompatActivity {
             public void onClick(View view) {
                 DatabaseReference userRef = mDatabase.child("board/" +eventName.getText().toString());
                 DatabaseReference userRefBoard = mDatabase.child("userboards/" + firebaseAuth.getCurrentUser().getUid());
-                userRef.child("Description").setValue(description.getText().toString());
+                //userRef.child("Description").setValue(description.getText().toString());
                 userRefBoard.child(eventName.getText().toString()).setValue(eventName.getText().toString());
                 //Todo : Launch activity with top value as event name and intent
 

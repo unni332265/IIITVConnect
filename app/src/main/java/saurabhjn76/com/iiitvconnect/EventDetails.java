@@ -121,13 +121,13 @@ public class EventDetails extends AppCompatActivity implements NavigationView.On
         //getting current user
         FirebaseUser user = firebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference userRef = mDatabase.child("personal/" + firebaseAuth.getCurrentUser().getUid());
+        DatabaseReference userRef = mDatabase.child("board/" + curEvent+"/");
         DatabaseReference userRefBoard = mDatabase.child("userboards/" + firebaseAuth.getCurrentUser().getUid());
         userRefBoard.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 arr.clear();
-              //  arr.add("Personal_Board");
+               arr.add("Personal_Board");
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Log.e("BoardName", postSnapshot.getValue().toString());
                     if (postSnapshot.getValue().toString()!="false") {
@@ -256,14 +256,20 @@ public class EventDetails extends AppCompatActivity implements NavigationView.On
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 //Toast.makeText(PersonalBoard.this,spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-                if(position==0){
+                if(spinner.getSelectedItem().toString()=="Personal_Board"){
                     //Todo: new
-                  //  finish();
-                    //Intent intent = new Intent(EventDetails.this,PersonalBoard.class);
+                //  finish();
+                  //  Intent intent = new Intent(EventDetails.this,PersonalBoard.class);
                     //startActivity(intent);
                 }
-                else
-                    Toast.makeText(EventDetails.this,spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                else {
+                    Toast.makeText(EventDetails.this, spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                    finish();
+                    Intent intent = new Intent(EventDetails.this,EventDetails.class);
+                    intent.putExtra("SELECTED",spinner.getSelectedItem().toString());
+                    intent.putExtra("ID",spinner.getSelectedItemPosition());
+                    startActivity(intent);
+                }
             }
 
             @Override
