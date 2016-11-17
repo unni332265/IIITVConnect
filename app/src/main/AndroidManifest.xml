@@ -43,7 +43,16 @@
                 android:value="saurabhjn76.com.iiitvconnect.PersonalBoard" />
         </activity>
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".CreateBoard"></activity>
+        <activity android:name=".CreateBoard" />
+        <activity
+            android:name=".EventDetails"
+            android:label="@string/title_activity_event_details"
+            android:parentActivityName=".CreateBoard"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="saurabhjn76.com.iiitvconnect.CreateBoard" />
+        </activity>
     </application>
 
 </manifest>

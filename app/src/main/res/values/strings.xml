@@ -82,6 +82,7 @@
         <item>Exams</item>
         <item>Add More</item>
     </string-array>
+    <string name="title_activity_event_details">EventDetails</string>
 
 
 </resources>
