@@ -290,7 +290,8 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
             Intent intent = new Intent(PersonalBoard.this, ProfileActivity.class);
             startActivity(intent);
         } else if (id == R.id.changeEmail) {
-
+            Intent intent = new Intent(PersonalBoard.this, AddRoomActivity.class);
+            startActivity(intent);
         } else if (id == R.id.reset_password) {
 
         } else if (id == R.id.delete_profile) {

@@ -31,7 +31,7 @@
         <activity
             android:name=".PersonalBoard"
             android:label="@string/title_activity_personal_board"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity android:name=".MainActivity" />
         <activity
             android:name=".TodoListActivity"
@@ -42,8 +42,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="saurabhjn76.com.iiitvconnect.PersonalBoard" />
         </activity>
-        <activity android:name=".ProfileActivity">
-        </activity>
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".AddRoomActivity" />
+        <activity android:name=".ChatRoom"></activity>
     </application>
 
 </manifest>
