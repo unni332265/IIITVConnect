@@ -129,13 +129,20 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-               // Log.e("postsnap",dataSnapshot.getValue().toString());
+                Log.e("postsnap",dataSnapshot.getValue().toString());
                 tileList.clear();
+                tileListCompleted.clear();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                  //  Log.e("postsnap", postSnapshot.getValue().toString());
+                   // Log.e("postsnap", dataSnapshot.getValue().toString());
                     if (postSnapshot.getValue().toString()!="false") {
-                        Tile tile = new Tile(postSnapshot.child("title").getValue(String.class), postSnapshot.child("description").getValue(String.class), postSnapshot.child("id").getValue(Integer.class), postSnapshot.child("date").getValue(String.class), postSnapshot.child("completed").getValue(boolean.class));
-                        tileList.add(tile);
+                        if(!postSnapshot.child("completed").getValue(boolean.class)) {
+                            Tile tile = new Tile(postSnapshot.child("title").getValue(String.class), postSnapshot.child("description").getValue(String.class), postSnapshot.child("id").getValue(Integer.class), postSnapshot.child("date").getValue(String.class), postSnapshot.child("completed").getValue(boolean.class));
+                            tileList.add(tile);
+                        }
+                        else{
+                            Tile tile = new Tile(postSnapshot.child("title").getValue(String.class), postSnapshot.child("description").getValue(String.class), postSnapshot.child("id").getValue(Integer.class), postSnapshot.child("date").getValue(String.class), postSnapshot.child("completed").getValue(boolean.class));
+                            tileListCompleted.add(tile);
+                        }
 
                         if (tileList.size()==0) {
                             recyclerView.setVisibility(View.GONE);
@@ -146,6 +153,15 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
                             emptyView.setVisibility(View.GONE);
                         }
                         tilesAdapter.notifyDataSetChanged();
+                        if (tileListCompleted.size()==0) {
+                            recyclerViewCompleted.setVisibility(View.GONE);
+                            emptyViewCompleted.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            recyclerViewCompleted.setVisibility(View.VISIBLE);
+                            emptyViewCompleted.setVisibility(View.GONE);
+                        }
+                        tilesAdapterCompleted.notifyDataSetChanged();
                         Log.e("poap", postSnapshot.getValue().toString());
                     }
                 }
@@ -284,7 +300,7 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
                                 }
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference myRef = database.getReference();
-                                DatabaseReference userRef = myRef.child("personal/" + firebaseAuth.getCurrentUser().getUid()+"/"+tileList.size()+1);
+                                DatabaseReference userRef = myRef.child("personal/" + firebaseAuth.getCurrentUser().getUid()+"/"+tle);
                                 userRef.setValue(new Tile(title.getText().toString(),description.getText().toString(),tileList.size()+1,day+"/"+month+"/"+yar,false));
 
                             }

@@ -52,6 +52,13 @@
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
+            <Switch
+                android:text="Mark it as Completed   "
+                android:layout_marginTop="20dp"
+                android:shadowColor="@color/bg_screen3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch2" />
         </LinearLayout>
 
 
@@ -62,6 +69,8 @@
             android:layout_width="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_height="wrap_content" />
+
+
 
     </android.support.v7.widget.CardView>
 
