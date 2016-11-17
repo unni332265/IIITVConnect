@@ -49,23 +49,14 @@ public class TilesAdapter extends RecyclerView.Adapter<TilesAdapter.MyViewHolder
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                    DatabaseReference userRef = mDatabase.child("personal/" + firebaseAuth.getCurrentUser().getUid()+ "/"+tilesList.get(getAdapterPosition()).getTitle());
-                    userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Log.e("snaaaa",dataSnapshot.getValue().toString());
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
                     if(b) {
                         userRef.child("completed").setValue(true);
                         Log.e("HEHEH", "completed");
+                       //aSwitch.setChecked(true);
                     }
                     else
-                        userRef.child("completed").setValue(false);
+                    userRef.child("completed").setValue(false);
+                       // aSwitch.setChecked(false);}
                 }
             });
             view.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +90,13 @@ public class TilesAdapter extends RecyclerView.Adapter<TilesAdapter.MyViewHolder
         holder.title.setText(tile.getTitle());
         holder.description.setText(tile.getDescription());
         holder.date.setText(tile.getDate());
+        holder.aSwitch.setChecked(tile.getcompleted());
+        if(tile.getcompleted()){
+            holder.aSwitch.setText("Mark it as Incomplete ");
+        }
+        else
+            holder.aSwitch.setText("Mark it as Complete ");
+
     }
 
     @Override
