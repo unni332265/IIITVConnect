@@ -92,12 +92,24 @@ public class EventDetails extends AppCompatActivity implements NavigationView.On
     ArrayAdapter<String> spinnerAdapter;
     private FirebaseAuth.AuthStateListener authListener;
     private DatabaseReference mDatabase;
+    private String curEvent;
+    private  int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_details_main);
-        arr.add("Personal_Board");
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            // String value = extras.getString("key");
+            //The key argument here must match that used in the other activity
+           curEvent = (String)extras.get("SELECTED");
+            Log.e("passsss",curEvent);
+
+            id =(Integer) extras.get("ID");
+            Log.e("ID",id+"");
+        }
+       arr.add("Personal_Board");
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() == null){
             //closing this activity
@@ -115,7 +127,7 @@ public class EventDetails extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 arr.clear();
-                arr.add("Personal_Board");
+              //  arr.add("Personal_Board");
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Log.e("BoardName", postSnapshot.getValue().toString());
                     if (postSnapshot.getValue().toString()!="false") {
@@ -238,15 +250,17 @@ public class EventDetails extends AppCompatActivity implements NavigationView.On
         spinnerAdapter = new ArrayAdapter<String>(EventDetails.this, R.layout.support_simple_spinner_dropdown_item,arr);
         spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
+        //spinner.setSelection(id);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 //Toast.makeText(PersonalBoard.this,spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
                 if(position==0){
-                    //Todo: new activity
-                    Intent intent = new Intent(EventDetails.this,PersonalBoard.class);
-                    startActivity(intent);
+                    //Todo: new
+                  //  finish();
+                    //Intent intent = new Intent(EventDetails.this,PersonalBoard.class);
+                    //startActivity(intent);
                 }
                 else
                     Toast.makeText(EventDetails.this,spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
@@ -313,25 +327,9 @@ public class EventDetails extends AppCompatActivity implements NavigationView.On
                                 }
 
                                 tilesAdapter.notifyDataSetChanged();
-                                if(reminder){
-                                    Calendar beginTime = Calendar.getInstance();
-                                    beginTime.set(yar, month, day, 13, 4);
-                                    Calendar endTime = Calendar.getInstance();
-                                    endTime.set(yar, month, day+1, 8, 30);
-                                    Intent intent = new Intent(Intent.ACTION_INSERT)
-                                            .setData(CalendarContract.Events.CONTENT_URI)
-                                            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
-                                            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
-                                            .putExtra(CalendarContract.Events.TITLE, tle)
-                                            .putExtra(CalendarContract.Events.DESCRIPTION, desc)
-                                            .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY)
-                                            .putExtra(Intent.EXTRA_EMAIL, firebaseAuth.getCurrentUser().getEmail());
-                                    startActivity(intent);
-                                    reminder=false;
-                                }
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference myRef = database.getReference();
-                                DatabaseReference userRef = myRef.child("personal/" + firebaseAuth.getCurrentUser().getUid()+"/"+tle);
+                                DatabaseReference userRef = myRef.child("board/" + curEvent+"/"+title.getText()+"/");
                                 userRef.setValue(new Tile(title.getText().toString(),description.getText().toString(),tileList.size()+1,day+"/"+month+"/"+yar,false));
 
                             }

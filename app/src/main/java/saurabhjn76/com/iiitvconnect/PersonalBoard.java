@@ -246,7 +246,10 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
                 //Toast.makeText(PersonalBoard.this,spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
                 if(position!=0){
                     //Todo: new activity
+                    finish();
                     Intent intent = new Intent(PersonalBoard.this,EventDetails.class);
+                    intent.putExtra("SELECTED",spinner.getSelectedItem().toString());
+                    intent.putExtra("ID",spinner.getSelectedItemPosition());
                     startActivity(intent);
                 }
             }
