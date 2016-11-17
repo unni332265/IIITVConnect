@@ -64,8 +64,13 @@ public class TilesAdapter extends RecyclerView.Adapter<TilesAdapter.MyViewHolder
                 public void onClick(View v) {
 
                    Intent intent = new Intent(v.getContext(), TodoListActivity.class);
+                    intent.putExtra("TITLE",tilesList.get(getAdapterPosition()).getTitle());
+                    intent.putExtra("DESC",tilesList.get(getAdapterPosition()).getDescription());
+                    intent.putExtra("ID",tilesList.get(getAdapterPosition()).getId());
+                    intent.putExtra("DATE",tilesList.get(getAdapterPosition()).getDate());
+                    intent.putExtra("STATUS",tilesList.get(getAdapterPosition()).getcompleted());
                     v.getContext().startActivity(intent);
-                    Toast.makeText(v.getContext(), "os version is: " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(v.getContext(), "os version is: " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
