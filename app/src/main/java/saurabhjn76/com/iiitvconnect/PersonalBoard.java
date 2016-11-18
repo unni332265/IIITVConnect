@@ -402,11 +402,11 @@ public class PersonalBoard extends AppCompatActivity implements NavigationView.O
         } else if (id == R.id.changeEmail) {
             Intent intent = new Intent(PersonalBoard.this, CreateBoard.class);
             startActivity(intent);
-        } else if (id == R.id.reset_password) {
-
-        } else if (id == R.id.delete_profile) {
-
-        } else if (id == R.id.nav_update_profile) {
+        }else if (id == R.id.delete_profile) {
+            Intent intent = new Intent(PersonalBoard.this, MainActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_update_profile) {
 
         } else if (id == R.id.nav_logout) {
                 firebaseAuth.signOut();

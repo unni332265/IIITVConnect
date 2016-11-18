@@ -39,21 +39,6 @@ public class TilesAdapterr extends RecyclerView.Adapter<TilesAdapterr.MyViewHold
 
             description = (TextView) view.findViewById(R.id.description);
             date = (TextView) view.findViewById(R.id.time);
-            aSwitch =(Switch) view.findViewById(R.id.switch2);
-            aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                   DatabaseReference userRef = mDatabase.child("personal/" + firebaseAuth.getCurrentUser().getUid()+ "/"+tilesList.get(getAdapterPosition()).getTitle());
-                    if(b) {
-                        userRef.child("completed").setValue(true);
-                        Log.e("HEHEH", "completed");
-                       //aSwitch.setChecked(true);
-                    }
-                    else
-                    userRef.child("completed").setValue(false);
-                       // aSwitch.setChecked(false);}
-                }
-            });
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -79,7 +64,7 @@ public class TilesAdapterr extends RecyclerView.Adapter<TilesAdapterr.MyViewHold
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.tile_row, parent, false);
+                .inflate(R.layout.tileeerow, parent, false);
 
         return new MyViewHolder(itemView);
     }

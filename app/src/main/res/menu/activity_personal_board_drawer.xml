@@ -8,14 +8,11 @@
             android:title="View Profile" />
         <item
             android:id="@+id/changeEmail"
-            android:title="Change Email" />
-        <item
-            android:id="@+id/reset_password"
-            android:title="Reset Password" />
+            android:title="Create Board" />
         <item
             android:id="@+id/delete_profile"
             android:icon="@drawable/ic_list_remove"
-            android:title="Delete Profile" />
+            android:title="Settings" />
     </group>
 
     <item android:title="">
