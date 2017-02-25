@@ -41,9 +41,9 @@ public class ProfileActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // ...
              //   Toast.makeText(ProfileActivity.this,dataSnapshot.getValue().toString(),Toast.LENGTH_SHORT).show();
-                Log.e("Snapshot",dataSnapshot.getValue().toString());
+              //  Log.e("Snapshot",dataSnapshot.getValue().toString());
               String string = dataSnapshot.child("firstName").getValue(String.class);
-                Log.e("Fname",string);
+              //  Log.e("Fname",string);
               //  phone=13243759598, lastName=nxnxcmn, firstName=bdbsnx, uid=6vPinMYBnGYaumjoWU0jIeSoRCD2, userName=ncnxmxm, emailid=test1@gmail.com
                 fname.setText(dataSnapshot.child("firstName").getValue(String.class));
                 lname.setText(dataSnapshot.child("lastName").getValue(String.class));

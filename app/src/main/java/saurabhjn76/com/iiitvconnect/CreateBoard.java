@@ -1,5 +1,6 @@
 package saurabhjn76.com.iiitvconnect;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -39,6 +40,11 @@ public class CreateBoard extends AppCompatActivity {
                 //userRef.child("Description").setValue(description.getText().toString());
                 userRefBoard.child(eventName.getText().toString()).setValue(eventName.getText().toString());
                 //Todo : Launch activity with top value as event name and intent
+                finish();
+                Intent intent = new Intent(CreateBoard.this,EventDetails.class);
+                intent.putExtra("SELECTED",eventName.getText().toString());
+                intent.putExtra("ID",1);
+                startActivity(intent);
 
             }
         });

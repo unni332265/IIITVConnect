@@ -76,7 +76,7 @@ public class EventDetails extends AppCompatActivity implements NavigationView.On
     static private RecyclerView recyclerView;
     static private TextView emptyView;
     static private List<Tile> tileList = new ArrayList<>();
-    static private TilesAdapterr tilesAdapter;
+    static private TilesAdapter tilesAdapter;
     static  private FloatingActionButton fab;
     private Spinner spinner;
     private Toolbar toolbar;
@@ -88,7 +88,7 @@ public class EventDetails extends AppCompatActivity implements NavigationView.On
     static private RecyclerView recyclerViewCompleted;
     static private TextView emptyViewCompleted;
     static private List<Tile> tileListCompleted = new ArrayList<>();
-    static private TilesAdapterr tilesAdapterCompleted;
+    static private TilesAdapter tilesAdapterCompleted;
     ArrayAdapter<String> spinnerAdapter;
     private FirebaseAuth.AuthStateListener authListener;
     private DatabaseReference mDatabase;
@@ -404,8 +404,6 @@ public class EventDetails extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.changeEmail) {
             Intent intent = new Intent(EventDetails.this, CreateBoard.class);
             startActivity(intent);
-        } else if (id == R.id.reset_password) {
-
         } else if (id == R.id.delete_profile) {
             Intent intent = new Intent(EventDetails.this, MainActivity.class);
             startActivity(intent);
@@ -487,7 +485,7 @@ public class EventDetails extends AppCompatActivity implements NavigationView.On
                 case 1:
                     recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
                     emptyView = (TextView) rootView.findViewById(R.id.empty_view);
-                    tilesAdapter = new TilesAdapterr(tileList);
+                    tilesAdapter = new TilesAdapter(tileList);
                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(rootView.getContext());
 
                     recyclerView.setLayoutManager(mLayoutManager);
@@ -507,7 +505,7 @@ public class EventDetails extends AppCompatActivity implements NavigationView.On
                 case 2: //fab.setVisibility(View.INVISIBLE);
                     recyclerViewCompleted = (RecyclerView) rootView.findViewById(R.id.recycler_view);
                     emptyViewCompleted = (TextView) rootView.findViewById(R.id.empty_view);
-                    tilesAdapterCompleted = new TilesAdapterr(tileListCompleted);
+                    tilesAdapterCompleted = new TilesAdapter(tileListCompleted);
                     RecyclerView.LayoutManager mLayoutManagerCompleted = new LinearLayoutManager(rootView.getContext());
 
                     recyclerViewCompleted.setLayoutManager(mLayoutManagerCompleted);
